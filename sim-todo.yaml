@@ -123,9 +123,9 @@ paths:
     post:
       tags:
         - todos
-      summary: Segna come da completare
+      summary: Assegna un todo
       description: |-
-        Segna un todo come da completare andando a impostare la proprietà completed a false
+        Assegna un todo a un utente
       operationId: uncompleteTodo
       security:
        - bearerAuth: []
