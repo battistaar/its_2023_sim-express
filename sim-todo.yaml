@@ -58,7 +58,11 @@ paths:
         $ref: '#/components/requestBodies/Todo'
       responses:
         '201':
-          $ref: '#/components/schemas/Todo'
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Todo'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '400':
