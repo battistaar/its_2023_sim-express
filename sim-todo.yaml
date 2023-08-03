@@ -168,6 +168,8 @@ paths:
       summary: List users
       description: Ritorna la lista di utenti registrati all'applicazione
       operationId: listUsers
+      security:
+       - bearerAuth: []
       responses:
         '200':
           description: successful operation
