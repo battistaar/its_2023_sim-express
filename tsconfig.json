@@ -12,5 +12,6 @@
     "resolveJsonModule": true,
     "strictPropertyInitialization": false,
     "experimentalDecorators": true
-  }
+  },
+  "exclude": ["test"]
 }
