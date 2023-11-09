@@ -38,6 +38,23 @@ describe('assign action', () => {
     await clearDB();
   });
 
+  it('should fail if no auth token', async () => {
+    const response = await req.post(`${TODO_PATH}/${todo1.id}/assign`)
+    .send({
+      title: 'test1'
+    });
+    expect(response.statusCode).toBe(401);
+  })
+
+  it('should fail if invalid auth token', async () => {
+    const response = await req.post(`${TODO_PATH}/${todo1.id}/assign`)
+    .set({'Authorization': `Bearer asd`})
+    .send({
+      title: 'test1'
+    });
+    expect(response.statusCode).toBe(401);
+  })
+
   it('should be able to assign', async () => {
     const response = await req.post(`${TODO_PATH}/${todo1.id}/assign`)
       .set({'Authorization': `Bearer ${token1}`})

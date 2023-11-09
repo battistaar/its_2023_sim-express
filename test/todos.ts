@@ -1,5 +1,7 @@
+import { URL, TODO_PATH } from "./utils";
+
 export async function createTodo(authToken, todoData) {
-  return fetch('http://localhost:3000/api/todo',
+  return fetch(`${URL}${TODO_PATH}`,
   {
     method: 'POST',
     headers: {
@@ -7,6 +9,18 @@ export async function createTodo(authToken, todoData) {
       'Authorization': `Bearer ${authToken}`
     },
     body: JSON.stringify(todoData)
+  })
+  .then(res => res.json());
+}
+
+export async function completeTodo(authToken, id) {
+  return fetch(`${URL}${TODO_PATH}/${id}/check`,
+  {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${authToken}`
+    }
   })
   .then(res => res.json());
 }

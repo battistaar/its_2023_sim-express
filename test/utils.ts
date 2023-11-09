@@ -1,7 +1,7 @@
 import { MongoClient } from 'mongodb'
 
 export const URL = 'http://localhost:3000/api';
-export const TODO_PATH = '/todo';
+export const TODO_PATH = '/todos';
 export const USER_PATH = '/users';
 
 export function checkValidation(body: any, property: string) {

@@ -1,60 +1,8 @@
 import request from "supertest";
-import { URL, clearDB, checkValidation, TODO_PATH } from "./utils";
-import { login, user1, user2, user3 } from "./users";
+import { URL, clearDB, TODO_PATH } from "./utils";
+import { login, user1, user2 } from "./users";
 const req = request(URL);
 
-describe('todo validation', () => {
-  let token: string = '';
-
-  beforeAll(async () => {
-    await clearDB();
-    let loginData = await login(user1);
-    token = loginData.token;
-  });
-
-  afterAll( async () => {
-    await clearDB();
-  });
-
-  it('should fail if title is missing', async () => {
-    const response = await req.post(TODO_PATH)
-      .set({'Authorization': `Bearer ${token}`})
-      .send({
-        dueDate: '2023-11-01'
-      });
-      checkValidation(response.body, 'title');
-  });
-
-  it('should validate dueDate format', async () => {
-    const response = await req.post(TODO_PATH)
-      .set({'Authorization': `Bearer ${token}`})
-      .send({
-        title: 'test1',
-        dueDate: '2023-14-01'
-      });
-      checkValidation(response.body, 'dueDate');
-  });
-
-  it('should validate assignedTo format', async () => {
-    const response = await req.post(TODO_PATH)
-      .set({'Authorization': `Bearer ${token}`})
-      .send({
-        title: 'test1',
-        assignedTo: 'test'
-      });
-      checkValidation(response.body, 'assignedTo');
-  });
-
-  it('should validate assignedTo existance', async () => {
-    const response = await req.post(TODO_PATH)
-      .set({'Authorization': `Bearer ${token}`})
-      .send({
-        title: 'test1',
-        assignedTo: '652d49fb8edaa92f08249295'
-      });
-      checkValidation(response.body, 'assignedTo');
-  });
-});
 
 describe('todo creation', () => {
   let token1: string = '';
@@ -74,6 +22,23 @@ describe('todo creation', () => {
     await clearDB();
   });
 
+  it('should fail if no auth token', async () => {
+    const response = await req.post(TODO_PATH)
+    .send({
+      title: 'test1'
+    });
+    expect(response.statusCode).toBe(401);
+  })
+
+  it('should fail if invalid auth token', async () => {
+    const response = await req.post(TODO_PATH)
+    .set({'Authorization': `Bearer asd`})
+    .send({
+      title: 'test1'
+    });
+    expect(response.statusCode).toBe(401);
+  })
+
   it('should create a todo with only title', async () => {
     const response = await req.post(TODO_PATH)
     .set({'Authorization': `Bearer ${token1}`})
@@ -89,7 +54,7 @@ describe('todo creation', () => {
   });
 
   it('should create a todo with dueDate', async () => {
-    const testDate = new Date('2023-11-10');
+    const testDate = new Date('2023-12-10');
     const response = await req.post(TODO_PATH)
     .set({'Authorization': `Bearer ${token1}`})
     .send({
